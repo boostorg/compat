@@ -25,3 +25,7 @@ The criteria for inclusion in Boost.Compat are as follows:
   available.
 * The component must not depend on any Boost libraries
   except Boost.Config, Boost.Assert, or Boost.ThrowException.
+* The component must not be a vocabulary type, visible in
+  the library APIs. The user should never see a `boost::compat`
+  type; the use of Compat types should be confined to library
+  implementations.
