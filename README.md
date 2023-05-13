@@ -1,5 +1,4 @@
 # Boost.Compat
-C++11 implementations of standard components added in later C++ standards
 
 Boost.Compat is a repository of C++11 implementations
 of standard components added in later C++ standards. Its
