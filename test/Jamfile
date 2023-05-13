@@ -21,3 +21,5 @@ project
   ;
 
 run quick.cpp ;
+
+run latch_test.cpp ;
