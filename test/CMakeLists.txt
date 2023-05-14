@@ -6,6 +6,8 @@ include(BoostTestJamfile OPTIONAL RESULT_VARIABLE HAVE_BOOST_TEST)
 
 if(HAVE_BOOST_TEST)
 
-boost_test_jamfile(FILE Jamfile LINK_LIBRARIES Boost::compat Boost::core)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+boost_test_jamfile(FILE Jamfile LINK_LIBRARIES Boost::compat Boost::core Threads::Threads)
 
 endif()
