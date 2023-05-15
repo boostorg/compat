@@ -12,6 +12,11 @@ add_library(Boost::compat ALIAS boost_compat)
 
 target_include_directories(boost_compat INTERFACE include)
 
+target_link_libraries(boost_compat
+  INTERFACE
+    Boost::assert
+)
+
 target_compile_features(boost_compat INTERFACE cxx_std_11)
 
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
