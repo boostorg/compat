@@ -10,19 +10,19 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ## Description
 
-The header `<boost/core/latch.hpp>` implements, in a portable way, the C++20 
+The header `<boost/compat/latch.hpp>` implements, in a portable way, the C++20
 `<latch>` header.
 
 `latch` is a single-use barrier which counts downwards, enabling synchronization
 between a set of threads. The counter can be manually decremented by any value,
-but decrementing below zero produces UB. The maximum number of waiters is
-specified to be `boost::core::latch::max()`.
+but decrementing below zero causes undefined behavior. The maximum number of waiters is
+specified to be `boost::compat::latch::max()`.
 
 ## Example
 
 ```cpp
 std::ptrdiff_t const num_threads = 16;
-boost::core::latch l(num_threads);
+boost::compat::latch l(num_threads);
 
 std::vector<std::thread> threads;
 for (int i = 0; i < num_threads; ++i) {
@@ -76,7 +76,7 @@ explicit latch(std::ptrdiff_t expected);
 ```
 
 [horizontal]
-Preconditions:;; `expected >= 0 && expected \<= boost::core::latch::max()`.
+Preconditions:;; `expected >= 0 && expected \<= boost::compat::latch::max()`.
 Effects:;; Constructs a latch with an internal counter value of `expected`.
 
 ### Copy Constructor
@@ -96,7 +96,7 @@ void count_down(std::ptrdiff_t n = 1);
 ```
 
 [horizontal]
-Preconditions:;; `n` must not be larger than the current internal count.
+Preconditions:;; `n` must not be larger than the current internal counter's value.
 Effects:;; Decrements the internal counter by `n`.
 
 ### try_wait
@@ -105,7 +105,7 @@ Effects:;; Decrements the internal counter by `n`.
 bool try_wait() const noexcept;
 ```
 
-Returns a boolean indicating whether or not the latch's internal count has reached 0 (`true`) or not (`false`).
+Returns a boolean indicating whether or not the latch's internal counter has reached 0 (`true`) or not (`false`).
 
 ### wait
 
@@ -123,7 +123,7 @@ void arrive_and_wait(std::ptrdiff_t n = 1);
 ```
 
 [horizontal]
-Preconditions:;; `n` must not be larger than the current internal count.
+Preconditions:;; `n` must not be larger than the current internal counter's value.
 Effects:;; Decrements the internal counter by `n` and if the counter non-zero, blocks the current thread.
 
 ### max
