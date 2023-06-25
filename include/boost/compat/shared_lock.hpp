@@ -24,7 +24,7 @@ void swap( shared_lock<Mutex>& x, shared_lock<Mutex>& y ) noexcept;
 namespace detail {
 
 BOOST_NORETURN BOOST_NOINLINE inline void
-throw_system_error( std::errc e, boost::source_location const& loc ) {
+throw_system_error( std::errc e, boost::source_location const& loc = BOOST_CURRENT_LOCATION ) {
   boost::throw_exception( std::system_error( std::make_error_code( e ) ), loc );
 }
 } // namespace detail
@@ -77,13 +77,11 @@ public:
 
   void lock() {
     if ( !pm_ ) {
-      detail::throw_system_error( std::errc::operation_not_permitted,
-                                  BOOST_CURRENT_LOCATION );
+      detail::throw_system_error( std::errc::operation_not_permitted );
     }
 
     if ( owns_lock() ) {
-      detail::throw_system_error( std::errc::resource_deadlock_would_occur,
-                                  BOOST_CURRENT_LOCATION );
+      detail::throw_system_error( std::errc::resource_deadlock_would_occur );
     }
 
     pm_->lock_shared();
@@ -92,13 +90,11 @@ public:
 
   bool try_lock() {
     if ( !pm_ ) {
-      detail::throw_system_error( std::errc::operation_not_permitted,
-                                  BOOST_CURRENT_LOCATION );
+      detail::throw_system_error( std::errc::operation_not_permitted );
     }
 
     if ( owns_lock() ) {
-      detail::throw_system_error( std::errc::resource_deadlock_would_occur,
-                                  BOOST_CURRENT_LOCATION );
+      detail::throw_system_error( std::errc::resource_deadlock_would_occur );
     }
 
     bool b = pm_->try_lock_shared();
@@ -108,8 +104,7 @@ public:
 
   void unlock() {
     if ( !pm_ || !owns_ ) {
-      detail::throw_system_error( std::errc::operation_not_permitted,
-                                  BOOST_CURRENT_LOCATION );
+      detail::throw_system_error( std::errc::operation_not_permitted );
     }
 
     pm_->unlock_shared();
