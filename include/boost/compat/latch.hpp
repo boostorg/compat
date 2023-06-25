@@ -1,10 +1,10 @@
+#ifndef BOOST_COMPAT_LATCH_HPP_INCLUDED
+#define BOOST_COMPAT_LATCH_HPP_INCLUDED
+
 // Copyright 2023 Peter Dimov.
 // Copyright 2023 Christian Mazakas.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-
-#ifndef BOOST_COMPAT_LATCH_HPP_INCLUDED
-#define BOOST_COMPAT_LATCH_HPP_INCLUDED
 
 #include <boost/assert.hpp>
 
