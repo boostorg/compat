@@ -26,4 +26,4 @@ run quick.cpp ;
 
 run latch_test.cpp ;
 run shared_lock_test.cpp ;
-run shared_lock_test.cpp : : : <exception-handling>off <toolset>msvc:<define>_HAS_EXCEPTIONS=0 : no_exceptions_shared_lock_test ;
+run shared_lock_test.cpp : : : <exception-handling>off : shared_lock_test_nx ;
