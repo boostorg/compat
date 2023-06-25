@@ -1,12 +1,12 @@
+#ifndef BOOST_COMPAT_SHARED_LOCK_HPP_INCLUDED
+#define BOOST_COMPAT_SHARED_LOCK_HPP_INCLUDED
+
 // Copyright 2023 Christian Mazakas.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef BOOST_COMPAT_SHARED_LOCK_HPP_INCLUDED
-#define BOOST_COMPAT_SHARED_LOCK_HPP_INCLUDED
-
-#include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/config.hpp>
 
 #include <memory>
 #include <mutex>
@@ -71,18 +71,7 @@ public:
   }
 
   shared_lock& operator=( shared_lock&& u ) noexcept {
-    if ( this != &u ) {
-      if ( owns_ ) {
-        unlock();
-      }
-
-      pm_ = u.pm_;
-      owns_ = u.owns_;
-
-      u.pm_ = nullptr;
-      u.owns_ = false;
-    }
-
+    shared_lock( std::move( u ) ).swap( *this );
     return *this;
   }
 
@@ -128,9 +117,8 @@ public:
   }
 
   void swap( shared_lock& u ) noexcept {
-    shared_lock tmp = std::move( *this );
-    *this = std::move( u );
-    u = std::move( tmp );
+    std::swap( pm_, u.pm_ );
+    std::swap( owns_, u.owns_ );
   }
 
   mutex_type* release() noexcept {
