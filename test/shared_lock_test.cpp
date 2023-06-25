@@ -1,39 +1,35 @@
 #ifdef _MSC_VER
-
-// manually suppress warnings caused by usage of noexcept and the MS STL for our
-// <exception-handling>off builds
-#pragma warning( disable : 4530 )
-#pragma warning( disable : 4577 )
-
+#pragma warning(disable: 4530) // C++ exception handler used, but unwing semantics not enabled
+#pragma warning(disable: 4577) // noexcept used with no exception handling mode specified
 #endif
 
 #include <boost/compat/shared_lock.hpp>
 
-#include <boost/config.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/config.hpp>
 
 #include <atomic>
 #include <memory>
 #include <mutex>
 #include <thread>
 #include <type_traits>
+#include <stdexcept>
+#include <cstdio>
 
 #define STATIC_ASSERT( ... ) static_assert( __VA_ARGS__, #__VA_ARGS__ )
 
 #ifdef __clang__
-#pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-move"
 #endif
 
-#ifdef BOOST_NO_EXCEPTIONS
-namespace boost {
-BOOST_NORETURN void throw_exception( std::exception const&,
-                                     boost::source_location const& ) {
-  std::terminate();
-}
-} // namespace boost
-#endif
+struct invalid_lock_use: public std::runtime_error
+{
+    invalid_lock_use(): std::runtime_error( "Invalid lock use" )
+    {
+    }
+};
 
 struct dummy_lock {
 private:
@@ -52,8 +48,7 @@ public:
 
   void lock() {
     if ( lock_shared_count_ != unlock_shared_count_ ) {
-      boost::compat::detail::throw_system_error(
-          std::errc::resource_deadlock_would_occur, BOOST_CURRENT_LOCATION );
+      boost::throw_exception( invalid_lock_use(), BOOST_CURRENT_LOCATION );
     }
     ++lock_unique_count_;
   }
@@ -71,8 +66,7 @@ public:
 
   void lock_shared() {
     if ( lock_unique_count_ != unlock_unique_count_ ) {
-      boost::compat::detail::throw_system_error(
-          std::errc::resource_deadlock_would_occur, BOOST_CURRENT_LOCATION );
+      boost::throw_exception( invalid_lock_use(), BOOST_CURRENT_LOCATION );
     }
     ++lock_shared_count_;
   }
@@ -98,11 +92,11 @@ using shared_lock_type = boost::compat::shared_lock<dummy_lock>;
 void sanity_tests() {
   dummy_lock sp;
   sp.lock();
-  BOOST_TEST_THROWS( sp.lock_shared(), std::system_error );
+  BOOST_TEST_THROWS( sp.lock_shared(), invalid_lock_use );
   sp.unlock();
 
   sp.lock_shared();
-  BOOST_TEST_THROWS( sp.lock(), std::system_error );
+  BOOST_TEST_THROWS( sp.lock(), invalid_lock_use );
   sp.unlock_shared();
 }
 
@@ -547,3 +541,18 @@ int main() {
 
   return boost::report_errors();
 }
+
+#ifdef BOOST_NO_EXCEPTIONS
+
+namespace boost
+{
+
+BOOST_NORETURN void throw_exception( std::exception const& ex, boost::source_location const& loc )
+{
+    std::fprintf( stderr, "Exception '%s' at %s:%d\n", ex.what(), loc.file_name(), loc.line() );
+    std::terminate();
+}
+
+} // namespace boost
+
+#endif
