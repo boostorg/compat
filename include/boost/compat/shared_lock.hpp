@@ -5,12 +5,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/throw_exception.hpp>
-#include <boost/config.hpp>
+#include <boost/compat/detail/throw_system_error.hpp>
 
-#include <memory>
-#include <mutex>
-#include <system_error>
+#include <memory> // std::addressof
+#include <mutex> // std::defer_lock_t
+#include <system_error> // std::errc
 
 namespace boost {
 namespace compat {
@@ -20,14 +19,6 @@ class shared_lock;
 
 template <class Mutex>
 void swap( shared_lock<Mutex>& x, shared_lock<Mutex>& y ) noexcept;
-
-namespace detail {
-
-BOOST_NORETURN BOOST_NOINLINE inline void
-throw_system_error( std::errc e, boost::source_location const& loc = BOOST_CURRENT_LOCATION ) {
-  boost::throw_exception( std::system_error( std::make_error_code( e ) ), loc );
-}
-} // namespace detail
 
 template <class Mutex>
 class shared_lock {
