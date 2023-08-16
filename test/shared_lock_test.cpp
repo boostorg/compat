@@ -23,6 +23,9 @@
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wself-move"
 #endif
+#if __GNUC__ >= 13
+#pragma GCC diagnostic ignored "-Wself-move"
+#endif
 
 struct invalid_lock_use: public std::runtime_error
 {
