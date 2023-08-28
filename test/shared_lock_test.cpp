@@ -23,7 +23,7 @@
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wself-move"
 #endif
-#if __GNUC__ >= 13
+#if defined(__GNUC__) && __GNUC__ >= 13
 #pragma GCC diagnostic ignored "-Wself-move"
 #endif
 
