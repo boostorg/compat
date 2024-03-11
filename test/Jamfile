@@ -4,7 +4,7 @@
 #  https://www.boost.org/LICENSE_1_0.txt
 
 import testing ;
-import ../../config/checks/config : requires ;
+import config : requires ;
 
 project
   : default-build
@@ -20,6 +20,8 @@ project
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on
+
+    <library>/boost/core//boost_core
   ;
 
 run quick.cpp ;
