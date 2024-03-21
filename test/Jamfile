@@ -33,3 +33,6 @@ run invoke_fn_test.cpp ;
 run invoke_obj_test.cpp ;
 run invoke_mfn_test.cpp ;
 run invoke_md_test.cpp ;
+
+run mem_fn_mfn_test.cpp ;
+run mem_fn_md_test.cpp ;
