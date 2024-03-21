@@ -32,3 +32,4 @@ run shared_lock_test.cpp : : : <exception-handling>off : shared_lock_test_nx ;
 run invoke_fn_test.cpp ;
 run invoke_obj_test.cpp ;
 run invoke_mfn_test.cpp ;
+run invoke_md_test.cpp ;
