@@ -29,15 +29,15 @@ template<class M, class T> struct _mfn
     M T::* pm_;
 
     template<class U, class... A, class En = enable_if_t<is_same_or_base<T, U>::value>>
-    auto operator()( U&& u, A&&... a ) const
+    constexpr auto operator()( U&& u, A&&... a ) const
     BOOST_COMPAT_RETURNS( (std::forward<U>(u).*pm_)( std::forward<A>(a)... ) )
 
     template<class U, class... A, class = void, class En = enable_if_t< !is_same_or_base<T, U>::value && is_reference_wrapper<U>::value>>
-    auto operator()( U&& u, A&&... a ) const
+    constexpr auto operator()( U&& u, A&&... a ) const
     BOOST_COMPAT_RETURNS( (u.get().*pm_)( std::forward<A>(a)... ) )
 
     template<class U, class... A, class = void, class = void, class En = enable_if_t< !is_same_or_base<T, U>::value && !is_reference_wrapper<U>::value>>
-    auto operator()( U&& u, A&&... a ) const
+    constexpr auto operator()( U&& u, A&&... a ) const
     BOOST_COMPAT_RETURNS( ((*std::forward<U>(u)).*pm_)( std::forward<A>(a)... ) )
 };
 
@@ -46,28 +46,28 @@ template<class M, class T> struct _md
     M T::* pm_;
 
     template<class U, class En = enable_if_t<is_same_or_base<T, U>::value>>
-    auto operator()( U&& u ) const
+    constexpr auto operator()( U&& u ) const
     BOOST_COMPAT_RETURNS( std::forward<U>(u).*pm_ )
 
     template<class U, class = void, class En = enable_if_t< !is_same_or_base<T, U>::value && is_reference_wrapper<U>::value>>
-    auto operator()( U&& u ) const
+    constexpr auto operator()( U&& u ) const
     BOOST_COMPAT_RETURNS( u.get().*pm_ )
 
     template<class U, class = void, class = void, class En = enable_if_t< !is_same_or_base<T, U>::value && !is_reference_wrapper<U>::value>>
-    auto operator()( U&& u ) const
+    constexpr auto operator()( U&& u ) const
     BOOST_COMPAT_RETURNS( (*std::forward<U>(u)).*pm_ )
 };
 
 } // namespace detail
 
 template<class M, class T, class En = enable_if_t< std::is_function<M>::value > >
-auto mem_fn( M T::* pm ) noexcept
+constexpr auto mem_fn( M T::* pm ) noexcept
 {
     return detail::_mfn<M, T>{ pm };
 }
 
 template<class M, class T, class = void, class En = enable_if_t< !std::is_function<M>::value > >
-auto mem_fn( M T::* pm ) noexcept
+constexpr auto mem_fn( M T::* pm ) noexcept
 {
     return detail::_md<M, T>{ pm };
 }

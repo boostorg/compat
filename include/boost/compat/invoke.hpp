@@ -13,11 +13,11 @@ namespace boost {
 namespace compat {
 
 template<class F, class... A>
-auto invoke( F&& f, A&&... a )
+constexpr auto invoke( F&& f, A&&... a )
 BOOST_COMPAT_RETURNS( std::forward<F>(f)(std::forward<A>(a)...) )
 
 template<class M, class T, class... A>
-auto invoke( M T::* pm, A&&... a )
+constexpr auto invoke( M T::* pm, A&&... a )
 BOOST_COMPAT_RETURNS( mem_fn(pm)(std::forward<A>(a)...) )
 
 } // namespace compat
