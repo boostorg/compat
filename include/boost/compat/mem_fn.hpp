@@ -61,13 +61,13 @@ template<class M, class T> struct _md
 } // namespace detail
 
 template<class M, class T, class En = enable_if_t< std::is_function<M>::value > >
-constexpr auto mem_fn( M T::* pm ) noexcept
+constexpr auto mem_fn( M T::* pm ) noexcept -> detail::_mfn<M, T>
 {
     return detail::_mfn<M, T>{ pm };
 }
 
 template<class M, class T, class = void, class En = enable_if_t< !std::is_function<M>::value > >
-constexpr auto mem_fn( M T::* pm ) noexcept
+constexpr auto mem_fn( M T::* pm ) noexcept -> detail::_md<M, T>
 {
     return detail::_md<M, T>{ pm };
 }
