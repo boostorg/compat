@@ -10,7 +10,7 @@ int f0()
     return -1;
 }
 
-int f1( int x1 )
+int f1( int x1 ) noexcept
 {
     return x1;
 }
@@ -20,7 +20,7 @@ int f2( int x1, int x2 )
     return 10*x1+x2;
 }
 
-int f3( int x1, int x2, int x3 )
+int f3( int x1, int x2, int x3 ) noexcept
 {
     return 100*x1 + 10*x2 + x3;
 }
