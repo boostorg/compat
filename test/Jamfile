@@ -36,3 +36,8 @@ run invoke_md_test.cpp ;
 
 run mem_fn_mfn_test.cpp ;
 run mem_fn_md_test.cpp ;
+
+run invoke_fn_noexcept_test.cpp ;
+run invoke_obj_noexcept_test.cpp ;
+run invoke_mfn_noexcept_test.cpp ;
+run invoke_md_noexcept_test.cpp ;
