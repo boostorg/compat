@@ -41,3 +41,8 @@ run invoke_fn_noexcept_test.cpp ;
 run invoke_obj_noexcept_test.cpp ;
 run invoke_mfn_noexcept_test.cpp ;
 run invoke_md_noexcept_test.cpp ;
+
+compile invoke_fn_constexpr_test.cpp ;
+compile invoke_obj_constexpr_test.cpp ;
+compile invoke_mfn_constexpr_test.cpp ;
+compile invoke_md_constexpr_test.cpp ;
