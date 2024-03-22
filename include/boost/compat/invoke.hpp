@@ -8,6 +8,8 @@
 #include <boost/compat/mem_fn.hpp>
 #include <boost/compat/type_traits.hpp>
 #include <boost/compat/detail/returns.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #include <utility>
 
 namespace boost {
@@ -40,6 +42,12 @@ template<class F, class... A> struct is_invocable: detail::is_invocable_<void, F
 
 // is_nothrow_invocable
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+
+template<class F, class... A> struct is_nothrow_invocable: std::false_type {};
+
+#else
+
 namespace detail {
 
 template<class F, class... A> struct is_nothrow_invocable_
@@ -50,6 +58,8 @@ template<class F, class... A> struct is_nothrow_invocable_
 } // namespace detail
 
 template<class F, class... A> struct is_nothrow_invocable: conditional_t< is_invocable<F, A...>::value, detail::is_nothrow_invocable_<F, A...>, std::false_type >::type {};
+
+#endif
 
 } // namespace compat
 } // namespace boost

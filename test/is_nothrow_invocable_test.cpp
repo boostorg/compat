@@ -4,6 +4,8 @@
 
 #include <boost/compat/invoke.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 
 struct F
 {
@@ -84,9 +86,14 @@ int main()
     // object
 
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<F> ));
-    BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<F, char> ));
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<F, int, int> ));
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+
+    BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<F, char> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<F, float, float, float> ));
+
+#endif
 
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<F, int, int, int, int> ));
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<F const> ));
@@ -117,12 +124,16 @@ int main()
 
     // member data pointer
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X const> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X&> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X const&> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X*> ));
     BOOST_TEST_TRAIT_TRUE(( is_nothrow_invocable<int X::*, X const*> ));
+
+#endif
 
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<int X::*> ));
     BOOST_TEST_TRAIT_FALSE(( is_nothrow_invocable<int X::*, int> ));
