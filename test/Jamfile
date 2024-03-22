@@ -48,3 +48,5 @@ compile invoke_mfn_constexpr_test.cpp
   : <toolset>gcc-4.8:<build>no ;
 compile invoke_md_constexpr_test.cpp
   : <toolset>gcc-4.8:<build>no ;
+
+run invoke_result_test.cpp ;
