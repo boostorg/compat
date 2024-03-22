@@ -17,6 +17,8 @@ template<class T> using remove_cvref_t = remove_cv_t< remove_reference_t<T> >;
 
 template<bool B, class T = void> using enable_if_t = typename std::enable_if<B, T>::type;
 
+template<bool B, class T, class F> using conditional_t = typename std::conditional<B, T, F>::type;
+
 namespace detail {
 
 template<class...> struct make_void

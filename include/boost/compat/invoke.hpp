@@ -42,12 +42,14 @@ template<class F, class... A> struct is_invocable: detail::is_invocable_<void, F
 
 namespace detail {
 
-template<class, class F, class... A> struct is_nothrow_invocable_: std::false_type {};
-template<class F, class... A> struct is_nothrow_invocable_< enable_if_t< noexcept( compat::invoke( std::declval<F>(), std::declval<A>()... ) ) >, F, A... >: std::true_type {};
+template<class F, class... A> struct is_nothrow_invocable_
+{
+    using type = std::integral_constant<bool, noexcept( compat::invoke( std::declval<F>(), std::declval<A>()... ) )>;
+};
 
 } // namespace detail
 
-template<class F, class... A> struct is_nothrow_invocable: detail::is_nothrow_invocable_<void, F, A...> {};
+template<class F, class... A> struct is_nothrow_invocable: conditional_t< is_invocable<F, A...>::value, detail::is_nothrow_invocable_<F, A...>, std::false_type >::type {};
 
 } // namespace compat
 } // namespace boost
