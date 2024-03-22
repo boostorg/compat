@@ -6,6 +6,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/compat/mem_fn.hpp>
+#include <boost/compat/type_traits.hpp>
 #include <boost/compat/detail/returns.hpp>
 #include <utility>
 
@@ -25,6 +26,17 @@ BOOST_COMPAT_RETURNS( mem_fn(pm)(std::forward<A>(a)...) )
 // invoke_result_t
 
 template<class F, class... A> using invoke_result_t = decltype( compat::invoke( std::declval<F>(), std::declval<A>()... ) );
+
+// is_invocable
+
+namespace detail {
+
+template<class, class F, class... A> struct is_invocable_: std::false_type {};
+template<class F, class... A> struct is_invocable_< void_t<invoke_result_t<F, A...>>, F, A... >: std::true_type {};
+
+} // namespace detail
+
+template<class F, class... A> struct is_invocable: detail::is_invocable_<void, F, A...> {};
 
 } // namespace compat
 } // namespace boost

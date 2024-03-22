@@ -96,6 +96,8 @@ int main()
     BOOST_TEST_TRAIT_SAME( invoke_result_t<int X::*, X const>, int const&& );
     BOOST_TEST_TRAIT_SAME( invoke_result_t<int X::*, X&>, int& );
     BOOST_TEST_TRAIT_SAME( invoke_result_t<int X::*, X const&>, int const& );
+    BOOST_TEST_TRAIT_SAME( invoke_result_t<int X::*, X*>, int& );
+    BOOST_TEST_TRAIT_SAME( invoke_result_t<int X::*, X const*>, int const& );
 
     BOOST_TEST_TRAIT_FALSE(( mp_valid<invoke_result_t, int X::*> ));
     BOOST_TEST_TRAIT_FALSE(( mp_valid<invoke_result_t, int X::*, int> ));
