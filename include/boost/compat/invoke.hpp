@@ -38,6 +38,17 @@ template<class F, class... A> struct is_invocable_< void_t<invoke_result_t<F, A.
 
 template<class F, class... A> struct is_invocable: detail::is_invocable_<void, F, A...> {};
 
+// is_nothrow_invocable
+
+namespace detail {
+
+template<class, class F, class... A> struct is_nothrow_invocable_: std::false_type {};
+template<class F, class... A> struct is_nothrow_invocable_< enable_if_t< noexcept( compat::invoke( std::declval<F>(), std::declval<A>()... ) ) >, F, A... >: std::true_type {};
+
+} // namespace detail
+
+template<class F, class... A> struct is_nothrow_invocable: detail::is_nothrow_invocable_<void, F, A...> {};
+
 } // namespace compat
 } // namespace boost
 
