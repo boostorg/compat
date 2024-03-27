@@ -52,3 +52,5 @@ compile invoke_md_constexpr_test.cpp
 run invoke_result_test.cpp ;
 run is_invocable_test.cpp ;
 run is_nothrow_invocable_test.cpp ;
+
+run bind_front_fn_test.cpp ;

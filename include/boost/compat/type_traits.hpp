@@ -15,6 +15,8 @@ template<class T> using remove_cv_t = typename std::remove_cv<T>::type;
 template<class T> using remove_reference_t = typename std::remove_reference<T>::type;
 template<class T> using remove_cvref_t = remove_cv_t< remove_reference_t<T> >;
 
+template<class T> using decay_t = typename std::decay<T>::type;
+
 template<bool B, class T = void> using enable_if_t = typename std::enable_if<B, T>::type;
 
 template<bool B, class T, class F> using conditional_t = typename std::conditional<B, T, F>::type;
