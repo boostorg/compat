@@ -54,3 +54,4 @@ run is_invocable_test.cpp ;
 run is_nothrow_invocable_test.cpp ;
 
 run bind_front_fn_test.cpp ;
+run bind_front_obj_test.cpp ;
