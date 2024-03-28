@@ -4,6 +4,8 @@
 
 #include <boost/compat/bind_front.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 
 struct F1
 {
@@ -86,10 +88,14 @@ int main()
         BOOST_TEST_EQ( std::move( fn )( 8 ), 983 );
     }
 
+#if !BOOST_WORKAROUND(BOOST_GCC, < 40900)
+
     {
         auto const fn = boost::compat::bind_front( F2(), 9 );
         BOOST_TEST_EQ( std::move( fn )( 8 ), 984 );
     }
+
+#endif
 
     return boost::report_errors();
 }
