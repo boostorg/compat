@@ -59,3 +59,4 @@ run bind_front_mfn_test.cpp ;
 run bind_front_md_test.cpp ;
 
 compile bind_front_fn_constexpr_test.cpp ;
+compile bind_front_obj_constexpr_test.cpp ;
