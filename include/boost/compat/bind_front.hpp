@@ -7,8 +7,8 @@
 
 #include <boost/compat/invoke.hpp>
 #include <boost/compat/type_traits.hpp>
+#include <boost/compat/integer_sequence.hpp>
 #include <boost/compat/detail/returns.hpp>
-#include <boost/mp11/integer_sequence.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <tuple>
@@ -25,7 +25,7 @@ namespace detail {
 #endif
 
 template<class F, class A, class... B, std::size_t... I>
-static constexpr auto invoke_bind_front_( F&& f, A&& a, mp11::index_sequence<I...>, B&&... b )
+static constexpr auto invoke_bind_front_( F&& f, A&& a, index_sequence<I...>, B&&... b )
     BOOST_COMPAT_RETURNS( compat::invoke( std::forward<F>(f), std::get<I>( std::forward<A>(a) )..., std::forward<B>(b)... ) )
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1910)
@@ -47,16 +47,16 @@ public:
 public:
 
     template<class... B> BOOST_CXX14_CONSTEXPR auto operator()( B&&... b ) &
-        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( f_, a_, mp11::make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
+        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( f_, a_, make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
 
     template<class... B> constexpr auto operator()( B&&... b ) const &
-        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( f_, a_, mp11::make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
+        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( f_, a_, make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
 
     template<class... B> BOOST_CXX14_CONSTEXPR auto operator()( B&&... b ) &&
-        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( std::move(f_), std::move(a_), mp11::make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
+        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( std::move(f_), std::move(a_), make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
 
     template<class... B> constexpr auto operator()( B&&... b ) const &&
-        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( std::move(f_), std::move(a_), mp11::make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
+        BOOST_COMPAT_RETURNS( detail::invoke_bind_front_( std::move(f_), std::move(a_), make_index_sequence<sizeof...(A)>(), std::forward<B>(b)... ) )
 };
 
 } // namespace detail
