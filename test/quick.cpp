@@ -4,6 +4,8 @@
 
 #include <boost/compat/latch.hpp>
 #include <boost/compat/shared_lock.hpp>
+#include <boost/compat/invoke.hpp>
+#include <boost/compat/bind_front.hpp>
 
 int main()
 {
