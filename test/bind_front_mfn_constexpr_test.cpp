@@ -20,7 +20,6 @@ int main() {}
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 #define BOOST_TEST_EQ(x, y) STATIC_ASSERT((x) == (y))
 
-
 struct X
 {
     constexpr int f0()
