@@ -64,3 +64,8 @@ compile bind_front_mfn_constexpr_test.cpp ;
 compile bind_front_md_constexpr_test.cpp ;
 
 run integer_sequence_test.cpp ;
+
+run bind_back_fn_test.cpp ;
+run bind_back_obj_test.cpp ;
+run bind_back_mfn_test.cpp ;
+run bind_back_md_test.cpp ;
