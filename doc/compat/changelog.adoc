@@ -8,7 +8,7 @@ https://www.boost.org/LICENSE_1_0.txt
 # Revision History
 :idprefix: changelog_
 
-## Changes in 1.85.0
+## Changes in 1.86.0
 
 * Added `bind_front.hpp`, `bind_back.hpp`, `invoke.hpp`, `mem_fn.hpp`, `integer_sequence.hpp` and `type_traits.hpp`.
 
