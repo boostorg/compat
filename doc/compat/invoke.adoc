@@ -1,0 +1,92 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#invoke]
+# <boost/compat/invoke.hpp>
+:idprefix: ref_invoke_
+
+## Description
+
+The header `<boost/compat/invoke.hpp>` implements the {cpp}17 function
+`std::invoke` and the associated utilities `invoke_result_t`, `is_invocable`,
+and `is_nothrow_invocable`.
+
+`invoke(f, a...)` generally returns `f(a...)`, but when `f` is a pointer to
+member, it invokes it as if by returning `mem_fn(f)(a...)`. This allows
+functions, function objects, and pointers to members to be treated uniformly
+by components such as `bind_front`.
+
+## Example
+
+```
+struct X
+{
+    void f(int a, int b) const noexcept;
+};
+
+int main()
+{
+    X x;
+    boost::compat::invoke(&X::f, x, 1, 2); // calls x.f(1, 2)
+}
+```
+
+## Synopsis
+
+```
+namespace boost
+{
+namespace compat
+{
+
+template<class F, class... A> auto invoke(F&& f, A&&... a);
+
+template<class F, class... A> using invoke_result_t = /*...*/;
+
+template<class F, class... A> struct is_invocable;
+
+template<class F, class... A> struct is_nothrow_invocable;
+
+} // namespace compat
+} // namespace boost
+```
+
+## invoke
+
+```
+template<class F, class... A> auto invoke(F&& f, A&&... a) noexcept(/*...*/);
+```
+
+[horizontal]
+Returns:;;
+  * `std::forward<F>(f)(std::forward<A>(a)...)`, when `f` is not a pointer to member;
+  * `mem_fn(f)(std::forward<A>(a)...)`, otherwise.
+Constraints:;; the return expression must be valid.
+Remarks:;; The `noexcept` clause is `noexcept(noexcept(r))`, where `r` is the return expression.
+
+## invoke_result_t
+
+```
+template<class F, class... A> using invoke_result_t =
+  decltype( invoke(std::declval<F>(), std::declval<A>()...) );
+```
+
+## is_invocable
+
+```
+template<class F, class... A> struct is_invocable: public /*...*/;
+```
+
+The base class of `is_invocable<F, A...>` is `std::true_type` when `invoke(std::declval<F>(), std::declval<A>()...)` is a valid expression, `std::false_type` otherwise.
+
+## is_nothrow_invocable
+
+```
+template<class F, class... A> struct is_nothrow_invocable: public /*...*/;
+```
+
+The base class of `is_nothrow_invocable<F, A...>` is `std::false_type` when `is_invocable<F, A...>::value` is `false`, `std::integral_constant<bool, noexcept(invoke(std::declval<F>(), std::declval<A>()...))>` otherwise.
+
