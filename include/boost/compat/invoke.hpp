@@ -23,7 +23,7 @@ BOOST_COMPAT_RETURNS( std::forward<F>(f)(std::forward<A>(a)...) )
 
 template<class M, class T, class... A>
 constexpr auto invoke( M T::* pm, A&&... a )
-BOOST_COMPAT_RETURNS( mem_fn(pm)(std::forward<A>(a)...) )
+BOOST_COMPAT_RETURNS( compat::mem_fn(pm)(std::forward<A>(a)...) )
 
 // invoke_result_t
 
