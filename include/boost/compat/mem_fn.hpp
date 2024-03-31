@@ -7,7 +7,7 @@
 
 #include <boost/compat/type_traits.hpp>
 #include <boost/compat/detail/returns.hpp>
-#include <functional>
+#include <utility>
 
 namespace boost {
 namespace compat {
