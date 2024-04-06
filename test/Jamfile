@@ -79,3 +79,8 @@ run invoke_r_fn_test.cpp ;
 run invoke_r_obj_test.cpp ;
 run invoke_r_mfn_test.cpp ;
 run invoke_r_md_test.cpp ;
+
+run invoke_r_fn_noexcept_test.cpp ;
+run invoke_r_obj_noexcept_test.cpp ;
+run invoke_r_mfn_noexcept_test.cpp ;
+run invoke_r_md_noexcept_test.cpp ;
