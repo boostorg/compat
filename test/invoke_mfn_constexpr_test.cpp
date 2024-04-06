@@ -9,7 +9,6 @@
 #include <boost/compat/invoke.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
-#include <functional>
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 #define BOOST_TEST_EQ(x, y) STATIC_ASSERT((x) == (y))
