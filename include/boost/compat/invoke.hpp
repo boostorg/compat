@@ -92,6 +92,27 @@ template<class R, class F, class... A> struct is_invocable_r:
     conditional_t< std::is_void<R>::value, std::true_type,
     detail::is_invocable_r_<R, F, A...> >> {};
 
+// is_nothrow_invocable_r
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+
+template<class R, class F, class... A> struct is_nothrow_invocable_r: std::false_type {};
+
+#else
+
+namespace detail {
+
+template<class R, class F, class... A> struct is_nothrow_invocable_r_
+{
+    using type = std::integral_constant<bool, noexcept( compat::invoke_r<R>( std::declval<F>(), std::declval<A>()... ) )>;
+};
+
+} // namespace detail
+
+template<class R, class F, class... A> struct is_nothrow_invocable_r: conditional_t< is_invocable_r<R, F, A...>::value, detail::is_nothrow_invocable_r_<R, F, A...>, std::false_type >::type {};
+
+#endif
+
 } // namespace compat
 } // namespace boost
 
