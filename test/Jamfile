@@ -91,3 +91,5 @@ compile invoke_r_mfn_constexpr_test.cpp
   : <toolset>gcc-4.8:<build>no <toolset>gcc-4.9:<build>no ;
 compile invoke_r_md_constexpr_test.cpp
   : <toolset>gcc-4.8:<build>no <toolset>gcc-4.9:<build>no ;
+
+run is_invocable_r_test.cpp ;

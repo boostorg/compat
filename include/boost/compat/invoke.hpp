@@ -79,6 +79,19 @@ constexpr R invoke_r( F&& f, A&&... a )
     return compat::invoke( std::forward<F>(f), std::forward<A>(a)... );
 }
 
+// is_invocable_r
+
+namespace detail {
+
+template<class R, class F, class... A> struct is_invocable_r_: std::is_convertible< invoke_result_t<F, A...>, R > {};
+
+} // namespace detail
+
+template<class R, class F, class... A> struct is_invocable_r:
+    conditional_t< !is_invocable<F, A...>::value, std::false_type,
+    conditional_t< std::is_void<R>::value, std::true_type,
+    detail::is_invocable_r_<R, F, A...> >> {};
+
 } // namespace compat
 } // namespace boost
 
