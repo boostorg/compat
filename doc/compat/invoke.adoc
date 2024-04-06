@@ -11,13 +11,16 @@ https://www.boost.org/LICENSE_1_0.txt
 ## Description
 
 The header `<boost/compat/invoke.hpp>` implements the {cpp}17 function
-`std::invoke` and the associated utilities `invoke_result_t`, `is_invocable`,
-and `is_nothrow_invocable`.
+`std::invoke`, the {cpp}23 function `std::invoke_r`, and the associated
+utilities `invoke_result_t`, `is_invocable`, `is_invocable_r`,
+`is_nothrow_invocable`, and `is_nothrow_invocable_r`.
 
 `invoke(f, a...)` generally returns `f(a...)`, but when `f` is a pointer to
 member, it invokes it as if by returning `mem_fn(f)(a...)`. This allows
 functions, function objects, and pointers to members to be treated uniformly
 by components such as `bind_front`.
+
+`invoke_r<R>(f, a...)` returns `invoke(f, a...)`, converted to `R`.
 
 ## Example
 
@@ -50,6 +53,12 @@ template<class F, class... A> struct is_invocable;
 
 template<class F, class... A> struct is_nothrow_invocable;
 
+template<class R, class F, class... A> R invoke_r(F&& f, A&&... a);
+
+template<class R, class F, class... A> struct is_invocable_r;
+
+template<class R, class F, class... A> struct is_nothrow_invocable_r;
+
 } // namespace compat
 } // namespace boost
 ```
@@ -57,7 +66,7 @@ template<class F, class... A> struct is_nothrow_invocable;
 ## invoke
 
 ```
-template<class F, class... A> auto invoke(F&& f, A&&... a) noexcept(/*...*/);
+template<class F, class... A> auto invoke(F&& f, A&&... a) noexcept(/*...*/) -> /*...*/;
 ```
 
 [horizontal]
@@ -65,7 +74,7 @@ Returns:;;
   * `std::forward<F>(f)(std::forward<A>(a)...)`, when `f` is not a pointer to member;
   * `mem_fn(f)(std::forward<A>(a)...)`, otherwise.
 Constraints:;; the return expression must be valid.
-Remarks:;; The `noexcept` clause is `noexcept(noexcept(r))`, where `r` is the return expression.
+Remarks:;; The return type is `decltype(r)`, and the `noexcept` clause is `noexcept(noexcept(r))`, where `r` is the return expression.
 
 ## invoke_result_t
 
@@ -89,4 +98,33 @@ template<class F, class... A> struct is_nothrow_invocable: public /*...*/;
 ```
 
 The base class of `is_nothrow_invocable<F, A...>` is `std::false_type` when `is_invocable<F, A...>::value` is `false`, `std::integral_constant<bool, noexcept(invoke(std::declval<F>(), std::declval<A>()...))>` otherwise.
+
+## invoke_r
+
+```
+template<class R, class F, class... A> R invoke_r(F&& f, A&&... a) noexcept(/*...*/);
+```
+
+[horizontal]
+Returns:;;
+  * `static_cast<R>(invoke(std::forward<F>(f), std::forward<A>(a)...))`, when `R` is (possibly cv-qualified) `void`;
+  * `invoke(std::forward<F>(f), std::forward<A>(a)...)`, implicitly converted to `R`, otherwise.
+Constraints:;; `is_invocable<F, A...>::value` must be `true` and, if `R` is not cv `void`, `std::is_convertible<invoke_result_t<F, A...>, R>::value` must be `true`.
+Remarks:;; The `noexcept` clause is `noexcept(noexcept(static_cast<R>(invoke(std::forward<F>(f), std::forward<A>(a)...))))`.
+
+## is_invocable_r
+
+```
+template<class R, class F, class... A> struct is_invocable: public /*...*/;
+```
+
+The base class of `is_invocable_r<R, F, A...>` is `std::true_type` when `invoke_r<R>(std::declval<F>(), std::declval<A>()...)` is a valid expression, `std::false_type` otherwise.
+
+## is_nothrow_invocable_r
+
+```
+template<class R, class F, class... A> struct is_nothrow_invocable: public /*...*/;
+```
+
+The base class of `is_nothrow_invocable<R, F, A...>` is `std::false_type` when `is_invocable_r<R, F, A...>::value` is `false`, `std::integral_constant<bool, noexcept(invoke_r<R>(std::declval<F>(), std::declval<A>()...))>` otherwise.
 
