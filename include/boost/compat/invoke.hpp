@@ -64,11 +64,11 @@ template<class F, class... A> struct is_nothrow_invocable: conditional_t< is_inv
 // invoke_r
 
 template<class R, class F, class... A, class En = enable_if_t<
-    std::is_void<R>::value && is_invocable<F, A...>::value>>
+    std::is_void<R>::value && is_invocable<F, A...>::value >>
 constexpr R invoke_r( F&& f, A&&... a )
-    noexcept( is_nothrow_invocable<F, A...>::value )
+    noexcept( noexcept( static_cast<R>( compat::invoke( std::forward<F>(f), std::forward<A>(a)... ) ) ) )
 {
-    compat::invoke( std::forward<F>(f), std::forward<A>(a)... );
+    return static_cast<R>( compat::invoke( std::forward<F>(f), std::forward<A>(a)... ) );
 }
 
 template<class R, class F, class... A, class = void, class En = enable_if_t<
