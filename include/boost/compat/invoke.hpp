@@ -61,6 +61,24 @@ template<class F, class... A> struct is_nothrow_invocable: conditional_t< is_inv
 
 #endif
 
+// invoke_r
+
+template<class R, class F, class... A, class En = enable_if_t<
+    std::is_void<R>::value && is_invocable<F, A...>::value>>
+constexpr R invoke_r( F&& f, A&&... a )
+    noexcept( is_nothrow_invocable<F, A...>::value )
+{
+    compat::invoke( std::forward<F>(f), std::forward<A>(a)... );
+}
+
+template<class R, class F, class... A, class = void, class En = enable_if_t<
+    !std::is_void<R>::value && std::is_convertible< invoke_result_t<F, A...>, R >::value >>
+constexpr R invoke_r( F&& f, A&&... a )
+    noexcept( noexcept( static_cast<R>( compat::invoke( std::forward<F>(f), std::forward<A>(a)... ) ) ) )
+{
+    return compat::invoke( std::forward<F>(f), std::forward<A>(a)... );
+}
+
 } // namespace compat
 } // namespace boost
 

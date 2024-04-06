@@ -74,3 +74,8 @@ compile bind_back_fn_constexpr_test.cpp ;
 compile bind_back_obj_constexpr_test.cpp ;
 compile bind_back_mfn_constexpr_test.cpp ;
 compile bind_back_md_constexpr_test.cpp ;
+
+run invoke_r_fn_test.cpp ;
+run invoke_r_obj_test.cpp ;
+run invoke_r_mfn_test.cpp ;
+run invoke_r_md_test.cpp ;
