@@ -84,3 +84,10 @@ run invoke_r_fn_noexcept_test.cpp ;
 run invoke_r_obj_noexcept_test.cpp ;
 run invoke_r_mfn_noexcept_test.cpp ;
 run invoke_r_md_noexcept_test.cpp ;
+
+compile invoke_r_fn_constexpr_test.cpp ;
+compile invoke_r_obj_constexpr_test.cpp ;
+compile invoke_r_mfn_constexpr_test.cpp
+  : <toolset>gcc-4.8:<build>no <toolset>gcc-4.9:<build>no ;
+compile invoke_r_md_constexpr_test.cpp
+  : <toolset>gcc-4.8:<build>no <toolset>gcc-4.9:<build>no ;
