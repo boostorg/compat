@@ -27,17 +27,21 @@ union thunk_storage {
 };
 
 template <bool NoEx, class Fp, class R, class... Args>
-R invoke_function(thunk_storage<NoEx> s, Args&&... args) noexcept(NoEx) {
-  auto f = reinterpret_cast<Fp>(s.pfn_);
-  return compat::invoke_r<R>(f, std::forward<Args>(args)...);
-}
+struct invoke_function_holder {
+  static R invoke_function(thunk_storage<NoEx> s, Args&&... args) noexcept(NoEx) {
+    auto f = reinterpret_cast<Fp>(s.pfn_);
+    return compat::invoke_r<R>(f, std::forward<Args>(args)...);
+  }
+};
 
 template <bool Const, bool NoEx, class F, class R, class... Args>
-R invoke_object(thunk_storage<NoEx> s, Args&&... args) noexcept(NoEx) {
-  using T = remove_reference_t<F>;
-  using cv_T = conditional_t<Const, add_const_t<T>, T>;
-  return compat::invoke_r<R>(*static_cast<cv_T*>(s.pobj_), std::forward<Args>(args)...);
-}
+struct invoke_object_holder {
+  static R invoke_object(thunk_storage<NoEx> s, Args&&... args) noexcept(NoEx) {
+    using T = remove_reference_t<F>;
+    using cv_T = conditional_t<Const, add_const_t<T>, T>;
+    return compat::invoke_r<R>(*static_cast<cv_T*>(s.pobj_), std::forward<Args>(args)...);
+  }
+};
 
 template <bool Const, bool NoEx, class R, class... Args>
 struct function_ref_base {
@@ -50,12 +54,14 @@ public:
   struct obj_tag {};
 
   template <class F>
-  function_ref_base(fp_tag, F* fn) noexcept : thunk_{}, invoke_(&invoke_function<NoEx, F*, R, Args...>) {
+  function_ref_base(fp_tag, F* fn) noexcept
+      : thunk_{}, invoke_(&invoke_function_holder<NoEx, F*, R, Args...>::invoke_function) {
     thunk_.pfn_ = reinterpret_cast<decltype(thunk_.pfn_)>(fn);
   }
 
   template <class F>
-  function_ref_base(obj_tag, F&& fn) noexcept : thunk_{}, invoke_(&invoke_object<Const, NoEx, F, R, Args...>) {
+  function_ref_base(obj_tag, F&& fn) noexcept
+      : thunk_{}, invoke_(&invoke_object_holder<Const, NoEx, F, R, Args...>::invoke_object) {
     thunk_.pobj_ = static_cast<void*>(std::addressof(fn));
   }
 
