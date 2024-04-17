@@ -2,6 +2,7 @@
 #define BOOST_COMPAT_TYPE_TRAITS_HPP_INCLUDED
 
 // Copyright 2024 Peter Dimov
+// Copyright 2024 Christian Mazakas
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -31,6 +32,8 @@ template<class...> struct make_void
 } // namespace detail
 
 template<class... T> using void_t = typename detail::make_void<T...>::type;
+
+template<class T> using add_const_t = typename std::add_const<T>::type;
 
 } // namespace compat
 } // namespace boost
