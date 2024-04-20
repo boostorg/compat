@@ -96,3 +96,9 @@ compile invoke_r_md_constexpr_test.cpp
 
 run is_invocable_r_test.cpp ;
 run is_nothrow_invocable_r_test.cpp ;
+
+run function_ref_fn_test.cpp ;
+run function_ref_obj_test.cpp ;
+
+run function_ref_fn_noexcept_test.cpp ;
+run function_ref_obj_noexcept_test.cpp ;
