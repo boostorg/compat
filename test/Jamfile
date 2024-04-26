@@ -22,6 +22,7 @@ project
     <toolset>clang:<warnings-as-errors>on
 
     <library>/boost/core//boost_core
+    <library>/boost/mp11//boost_mp11
   ;
 
 run quick.cpp ;
