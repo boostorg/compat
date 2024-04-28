@@ -20,6 +20,12 @@ project
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on
+
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81601
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91146
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92397
+    <toolset>gcc,<undefined-sanitizer>norecover:<cxxflags>"-Wno-array-bounds"
+    <toolset>gcc,<address-sanitizer>norecover:<cxxflags>"-Wno-array-bounds"
   ;
 
 run quick.cpp ;
