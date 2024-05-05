@@ -4,6 +4,7 @@
 #  https://www.boost.org/LICENSE_1_0.txt
 
 import testing ;
+import-search /boost/config/checks ;
 import config : requires ;
 
 project
