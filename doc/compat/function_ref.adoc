@@ -52,6 +52,9 @@ class function_ref<R(ArgTypes...) cv noexcept(noex)> {
 public:
   template<class F> function_ref(F*) noexcept;
   template<class F> function_ref(F&&) noexcept;
+  template<auto f> function_ref(nontype_t<f>) noexcept;
+  template<auto f, class U> function_ref(nontype_t<f>, U&&) noexcept;
+  template<auto f, class T> function_ref(nontype_t<f>, cv T*) noexcept;
 
   function_ref(const function_ref&) noexcept = default;
   function_ref& operator=(const function_ref&) noexcept = default;
@@ -91,6 +94,76 @@ Effects:;; Constructs a `function_ref` that stores the address of the supplied C
 participates in resolution when `fn` is not a pointer-to-member or pointer-to-member-function. +
 +
 Calling the `function_ref` is expression-equivalent to: + `invoke_r<R>(static_cast<cv T&>(f), call-args...)`.
+
+### Pointer to Member Function Constructor
+
+```cpp
+template<auto f> function_ref(nontype_t<f>) noexcept;
+```
+
+[horizontal]
+Effects:;; Constructs a `function_ref` using the supplied pointer to member function. This overload only participates
+in resolution when `f` is a pointer to member or pointer to member function. +
++
+Calling the `function_ref` is express-equivalent to: `invoke_r<R>(f, class-args)`.
+Example:;;
++
+--
+```cpp
+struct point { int x = 1, y = 2; };
+
+point p;
+compat::function_ref<int(point const&)> f(compat::nontype_t<&point::x>{});
+
+BOOST_TEST_EQ(f(p), 1);
+```
+--
+
+### Bound Object Constructor
+
+```cpp
+template<auto f, class U> function_ref(nontype_t<f>, U&&) noexcept;
+```
+
+[horizontal]
+Effects:;; Constructs a `function_ref` using the supplied pointer to member or pointer to member function and a reference
+to an object to bind it to. +
++
+This overload only participates in resolution if `is_rvalue_reference_v<U&&>` is false.
+Example:;;
++
+--
+```cpp
+struct point { int x = 1, y = 2; };
+
+point p;
+compat::function_ref<int()> f(compat::nontype_t<&point::x>{}, p);
+
+BOOST_TEST_EQ(f(), 1);
+```
+--
+
+### Bound Pointer Constructor
+
+```cpp
+template<auto f, class T> function_ref(nontype_t<f>, cv T*) noexcept;
+```
+
+[horizontal]
+Effects:;; Constructs a `function_ref` using the supplied pointer to member or pointer to member function and a pointer
+to an object.
+Example:;;
++
+--
+```cpp
+struct point { int x = 1, y = 2; };
+
+point p;
+compat::function_ref<int()> f(compat::nontype_t<&point::x>{}, &p);
+
+BOOST_TEST_EQ(f(), 1);
+```
+--
 
 ### Copy Constructor
 
