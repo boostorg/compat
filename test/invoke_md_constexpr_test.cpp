@@ -29,7 +29,7 @@ int main()
         BOOST_TEST_EQ( boost::compat::invoke( &X::m, &x ), -1 );
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, >= 1920 && BOOST_MSVC < 1940)
+#if !BOOST_WORKAROUND(BOOST_MSVC, >= 1920 && BOOST_MSVC < 1950)
     {
         BOOST_TEST_EQ( boost::compat::invoke( &X::m, Y() ), -1 );
 
