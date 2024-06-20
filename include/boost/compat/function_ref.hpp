@@ -62,7 +62,7 @@ public:
   template <class F>
   function_ref_base(obj_tag, F&& fn) noexcept
       : thunk_{}, invoke_(&invoke_object_holder<Const, NoEx, F, R, Args...>::invoke_object) {
-    thunk_.pobj_ = static_cast<void*>(std::addressof(fn));
+    thunk_.pobj_ = const_cast<void*>(static_cast<void const*>(std::addressof(fn)));
   }
 
   function_ref_base(const function_ref_base&) noexcept = default;
