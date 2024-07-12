@@ -36,7 +36,7 @@ int main()
 #endif
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, >= 1920 && BOOST_MSVC < 1940)
+#if !BOOST_WORKAROUND(BOOST_MSVC, >= 1920 && BOOST_MSVC < 1950)
     {
         constexpr Y y = {};
 

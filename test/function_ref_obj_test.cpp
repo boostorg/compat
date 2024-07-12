@@ -59,30 +59,39 @@ int main() {
       compat::function_ref<S1> fv1(f);
 
       BOOST_TEST_EQ(fv1(), -1);
+
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const&>));
+      BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const&&>));
 
       compat::function_ref<S2> fv2(f);
 
       BOOST_TEST_EQ(fv2(1), 1);
+
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1 const>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1 const&>));
 
       compat::function_ref<S3> fv3(f);
 
       BOOST_TEST_EQ(fv3(1, 2), 12);
+
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1&&>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const&&>));
 
       compat::function_ref<S4> fv4(f);
 
       BOOST_TEST_EQ(fv4(1, 2, 3), 123);
+
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1&&>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const&&>));
     }
 
     {
@@ -93,29 +102,89 @@ int main() {
 
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1&>));
+      BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1&&>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const&>));
+      BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S1>, F1 const&&>));
 
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1&>));
+      BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1&&>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1 const>));
       BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1 const&>));
+      BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<S2>, F1 const&&>));
 
       compat::function_ref<S3> fv3(f);
 
       BOOST_TEST_EQ(fv3(1, 2), 12);
+
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1&&>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S3>, F1 const&&>));
 
       compat::function_ref<S4> fv4(f);
 
       BOOST_TEST_EQ(fv4(1, 2, 3), 123);
+
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1&&>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const>));
       BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const&>));
+      BOOST_TEST_TRAIT_TRUE((std::is_constructible<compat::function_ref<S4>, F1 const&&>));
+    }
+
+    {
+      using S1 = int();
+      using S2 = int(int);
+
+      auto& fref = f;
+
+      compat::function_ref<S1> fv1(fref);
+      BOOST_TEST_EQ(fv1(), -1);
+
+      compat::function_ref<S2> fv2(fref);
+      BOOST_TEST_EQ(fv2(1), 1);
+    }
+
+    {
+      using S1 = int();
+      using S2 = int(int);
+
+      compat::function_ref<S1> fv1(std::move(f));
+      BOOST_TEST_EQ(fv1(), -1);
+
+      compat::function_ref<S2> fv2(std::move(f));
+      BOOST_TEST_EQ(fv2(1), 1);
+    }
+
+    {
+      using S3 = int(int, int) const;
+      using S4 = int(int, int, int) const;
+
+      auto const& fref = f;
+
+      compat::function_ref<S3> fv3(fref);
+      BOOST_TEST_EQ(fv3(1, 2), 12);
+
+      compat::function_ref<S4> fv4(fref);
+      BOOST_TEST_EQ(fv4(1, 2, 3), 123);
+    }
+
+    {
+      using S3 = int(int, int) const;
+      using S4 = int(int, int, int) const;
+
+      auto const&& fref = std::move(f);
+
+      compat::function_ref<S3> fv3(fref);
+      BOOST_TEST_EQ(fv3(1, 2), 12);
+
+      compat::function_ref<S4> fv4(fref);
+      BOOST_TEST_EQ(fv4(1, 2, 3), 123);
     }
   }
 
@@ -125,10 +194,18 @@ int main() {
       compat::function_ref<int(int, int)> fv1(g);
       BOOST_TEST_EQ(fv1(3, 2), 321);
 
+      auto& gref = g;
+      compat::function_ref<int(int, int)> rfv1(gref);
+      BOOST_TEST_EQ(rfv1(3, 2), 321);
+
       compat::function_ref<int(int, int)> fv2(std::move(g));
       BOOST_TEST_EQ(fv2(3, 2), 321);
 
       compat::function_ref<int(int, int) const> fv3(g);
+      BOOST_TEST_EQ(fv3(3, 2), 322);
+
+      auto const& gcref = g;
+      compat::function_ref<int(int, int) const> crfv3(gcref);
       BOOST_TEST_EQ(fv3(3, 2), 322);
 
       compat::function_ref<int(int, int) const> fv4(std::move(g));
