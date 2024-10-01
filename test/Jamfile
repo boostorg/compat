@@ -112,3 +112,6 @@ run function_ref_mfn_test.cpp ;
 run function_ref_fn_noexcept_test.cpp ;
 run function_ref_mfn_noexcept_test.cpp ;
 run function_ref_obj_noexcept_test.cpp ;
+
+run to_array_test.cpp ;
+compile to_array_constexpr_test.cpp ;
