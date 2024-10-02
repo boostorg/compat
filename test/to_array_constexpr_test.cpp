@@ -4,8 +4,6 @@
 
 #include <boost/compat/to_array.hpp>
 
-#include <utility>
-
 namespace compat = boost::compat;
 
 int main()
@@ -14,7 +12,7 @@ int main()
     // so we just test that code compiles
     constexpr int input[] = {1, 2, 3};
     constexpr auto output_lvalue = compat::to_array(input);
-    constexpr auto output_rvalue = compat::to_array(static_cast<decltype(input)&&>(input));
+    constexpr auto output_rvalue = compat::to_array(static_cast<const int(&&)[3]>(input));
     static_cast<void>(output_lvalue);
     static_cast<void>(output_rvalue);
 }
