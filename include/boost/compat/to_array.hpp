@@ -48,10 +48,10 @@ constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N])
 {
     static_assert(std::is_move_constructible<T>::value, "This overload requires T to be move-constructible");
     static_assert(!std::is_array<T>::value, "to_array does not work for multi-dimensional C arrays");
-    return detail::to_array_rvalue(std::move(a), make_index_sequence<N>{});
+    return detail::to_array_rvalue(static_cast<T(&&)[N]>(a), make_index_sequence<N>{});
 }
 
 }  // namespace compat
 }  // namespace boost
 
-#endif  // BOOST_COMPAT_MEM_FN_HPP_INCLUDED
+#endif  // BOOST_COMPAT_TO_ARRAY_HPP_INCLUDED
