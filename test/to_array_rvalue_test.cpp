@@ -23,6 +23,14 @@ int main()
         BOOST_TEST_EQ(output[1], 6);
     }
     {
+        // regular C array, const
+        const int input[] = {5, 6};
+        auto output = compat::to_array(std::move(input));
+        static_assert(std::is_same<decltype(output), std::array<int, 2>>::value, "");
+        BOOST_TEST_EQ(output[0], 5);
+        BOOST_TEST_EQ(output[1], 6);
+    }
+    {
         // values moved
         const std::vector<int> vec{1, 2};
         std::vector<int> input[]{vec};
@@ -30,6 +38,15 @@ int main()
         static_assert(std::is_same<decltype(output), std::array<std::vector<int>, 1>>::value, "");
         BOOST_TEST_ALL_EQ(output[0].begin(), output[0].end(), vec.begin(), vec.end());
         BOOST_TEST(input[0].empty());  // input left in a moved-from state
+    }
+    {
+        // const values work (although they don't result in an effective move)
+        const std::vector<int> vec{1, 2};
+        const std::vector<int> input[]{vec};
+        auto output = compat::to_array(std::move(input));
+        static_assert(std::is_same<decltype(output), std::array<std::vector<int>, 1>>::value, "");
+        BOOST_TEST_ALL_EQ(output[0].begin(), output[0].end(), vec.begin(), vec.end());
+        BOOST_TEST_ALL_EQ(input[0].begin(), input[0].end(), vec.begin(), vec.end());  // input not modified
     }
     {
         // move-only types work

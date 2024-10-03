@@ -21,6 +21,14 @@ int main()
         BOOST_TEST_EQ(output[1], 2);
     }
     {
+        // regular C array, const
+        const int input[] = {1, 2};
+        auto output = compat::to_array(input);
+        static_assert(std::is_same<decltype(output), std::array<int, 2>>::value, "");
+        BOOST_TEST_EQ(output[0], 1);
+        BOOST_TEST_EQ(output[1], 2);
+    }
+    {
         // values not moved
         const std::vector<int> vec{1, 2};
         std::vector<int> input[]{vec};
