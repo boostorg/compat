@@ -55,8 +55,9 @@ constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N]);
 Effects:;; Creates an array of `N` elements by copying elements in `a`.
            For every `i` in `0, ..., N-1`, copy-initializes the i-th element
            in the output array from `a[i]`.
-Type requirements:;; `std::is_constructible_v<T, T&> && !std::is_array_v<T>`.
-                      Otherwise, the overload is ill-formed.
+Type requirements:;; `std::is_constructible_v<U, U&> && !std::is_array_v<U>`,
+                     where `U` is `remove_cvref_t<T>`.
+                     Otherwise, the overload is ill-formed.
 
 
 ```cpp
@@ -68,5 +69,6 @@ constexpr std::array<remove_cvref_t<T>, N> to_array(T (&a)[N]);
 Effects:;; Creates an array of `N` elements by moving elements in `a`.
            For every `i` in `0, ..., N-1`, move-initializes the i-th element
            in the output array from `std::move(a[i])`.
-Type requirements:;; `std::is_move_constructible_v<T> && !std::is_array_v<T>`.
-                      Otherwise, the overload is ill-formed.
+Type requirements:;; `std::is_move_constructible_v<U> && !std::is_array_v<U>`,
+                     where `U` is `remove_cvref_t<T>`.
+                     Otherwise, the overload is ill-formed.
