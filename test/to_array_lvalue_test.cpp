@@ -31,11 +31,12 @@ int main()
     }
     {
         // constexpr check
-        // Most array members are not constexpr until late C++ standards,
-        // so we just test that code compiles
         constexpr int input[] = {1, 2, 3};
         constexpr auto output = compat::to_array(input);
-        static_cast<void>(output);
+        static_assert(std::is_same<decltype(output), const std::array<int, 3>>::value, "");
+        BOOST_TEST_EQ(output[0], 1);
+        BOOST_TEST_EQ(output[1], 2);
+        BOOST_TEST_EQ(output[2], 3);
     }
 
     return boost::report_errors();
