@@ -30,6 +30,15 @@ int main()
         BOOST_TEST_ALL_EQ(input[0].begin(), input[0].end(), vec.begin(), vec.end());  // input not modified
     }
     {
+        // const values work
+        const std::vector<int> vec{1, 2};
+        const std::vector<int> input[]{vec};
+        auto output = compat::to_array(input);
+        static_assert(std::is_same<decltype(output), std::array<std::vector<int>, 1>>::value, "");
+        BOOST_TEST_ALL_EQ(output[0].begin(), output[0].end(), vec.begin(), vec.end());
+        BOOST_TEST_ALL_EQ(input[0].begin(), input[0].end(), vec.begin(), vec.end());  // input not modified
+    }
+    {
         // constexpr check
         constexpr int input[] = {1, 2, 3};
         constexpr auto output = compat::to_array(input);
