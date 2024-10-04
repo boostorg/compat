@@ -35,10 +35,10 @@ namespace compat
 {
 
 template <class T, std::size_t N>
-constexpr std::array<remove_cvref_t<T>, N> to_array(T (&a)[N]);
+constexpr std::array<remove_cv_t<T>, N> to_array(T (&a)[N]);
 
 template <class T, std::size_t N>
-constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N]);
+constexpr std::array<remove_cv_t<T>, N> to_array(T (&&a)[N]);
 
 } // namespace compat
 } // namespace boost
@@ -48,15 +48,14 @@ constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N]);
 
 ```cpp
 template <class T, std::size_t N>
-constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N]);
+constexpr std::array<remove_cv_t<T>, N> to_array(T (&&a)[N]);
 ```
 
 [horizontal]
 Effects:;; Creates an array of `N` elements by copying elements in `a`.
            For every `i` in `0, ..., N-1`, copy-initializes the i-th element
            in the output array from `a[i]`.
-Type requirements:;; `std::is_constructible_v<U, U&> && !std::is_array_v<U>`,
-                     where `U` is `remove_cvref_t<T>`.
+Type requirements:;; `std::is_constructible_v<remove_cv_t<T>, T&> && !std::is_array_v<T>`.
                      Otherwise, the overload is ill-formed.
 
 
@@ -69,6 +68,5 @@ constexpr std::array<remove_cvref_t<T>, N> to_array(T (&a)[N]);
 Effects:;; Creates an array of `N` elements by moving elements in `a`.
            For every `i` in `0, ..., N-1`, move-initializes the i-th element
            in the output array from `std::move(a[i])`.
-Type requirements:;; `std::is_move_constructible_v<U> && !std::is_array_v<U>`,
-                     where `U` is `remove_cvref_t<T>`.
+Type requirements:;; `std::is_constructible_v<remove_cv_t<T>, T&&> && !std::is_array_v<T>`.
                      Otherwise, the overload is ill-formed.
