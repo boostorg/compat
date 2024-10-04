@@ -112,3 +112,8 @@ run function_ref_mfn_test.cpp ;
 run function_ref_fn_noexcept_test.cpp ;
 run function_ref_mfn_noexcept_test.cpp ;
 run function_ref_obj_noexcept_test.cpp ;
+
+# MSVC 14.0/14.1 C array rvalue references do not work
+run to_array_lvalue_test.cpp ;
+run to_array_rvalue_test.cpp : : :
+  <toolset>msvc-14.0:<build>no <toolset>msvc-14.1:<build>no ;
