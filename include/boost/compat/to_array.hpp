@@ -19,13 +19,13 @@ namespace compat {
 namespace detail {
 
 template <class T, std::size_t N, std::size_t... I>
-constexpr std::array<remove_cvref_t<T>, N> to_array_lvalue(T (&a)[N], index_sequence<I...>)
+constexpr std::array<remove_cv_t<T>, N> to_array_lvalue(T (&a)[N], index_sequence<I...>)
 {
     return {{a[I]...}};
 }
 
 template <class T, std::size_t N, std::size_t... I>
-constexpr std::array<remove_cvref_t<T>, N> to_array_rvalue(T (&&a)[N], index_sequence<I...>)
+constexpr std::array<remove_cv_t<T>, N> to_array_rvalue(T (&&a)[N], index_sequence<I...>)
 {
     return {{std::move(a[I])...}};
 }
@@ -33,24 +33,22 @@ constexpr std::array<remove_cvref_t<T>, N> to_array_rvalue(T (&&a)[N], index_seq
 }  // namespace detail
 
 template <class T, std::size_t N>
-constexpr std::array<remove_cvref_t<T>, N> to_array(T (&a)[N])
+constexpr std::array<remove_cv_t<T>, N> to_array(T (&a)[N])
 {
-    using U = remove_cvref_t<T>;
     static_assert(
-        std::is_constructible<U, U&>::value,
-        "This overload requires the resulting element type U to be constructible from U&"
+        std::is_constructible<remove_cv_t<T>, T&>::value,
+        "This overload requires the resulting element type to be constructible from T&"
     );
-    static_assert(!std::is_array<U>::value, "to_array does not work for multi-dimensional C arrays");
+    static_assert(!std::is_array<T>::value, "to_array does not work for multi-dimensional C arrays");
     return detail::to_array_lvalue(a, make_index_sequence<N>{});
 }
 
 template <class T, std::size_t N>
-constexpr std::array<remove_cvref_t<T>, N> to_array(T (&&a)[N])
+constexpr std::array<remove_cv_t<T>, N> to_array(T (&&a)[N])
 {
-    using U = remove_cvref_t<T>;
     static_assert(
-        std::is_move_constructible<U>::value,
-        "This overload requires the resulting element type U to be move-constructible"
+        std::is_constructible<remove_cv_t<T>, T&&>::value,
+        "This overload requires the resulting element type to be constructible from T&&"
     );
     static_assert(!std::is_array<T>::value, "to_array does not work for multi-dimensional C arrays");
     return detail::to_array_rvalue(static_cast<T(&&)[N]>(a), make_index_sequence<N>{});
