@@ -26,12 +26,8 @@ template<auto V> struct nontype_t: public detail::nontype11<decltype(V), V>
     explicit nontype_t() = default;
 };
 
-# if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
-
 template<auto V>
 BOOST_INLINE_CONSTEXPR nontype_t<V> nontype {};
-
-# endif
 
 #endif
 
