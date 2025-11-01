@@ -19,8 +19,8 @@
 
 #else
 
-#define NONTYPE(fn) compat::detail::nontype11<decltype(fn), fn>{}
-#define NONTYPE_T(fn) compat::detail::nontype11<decltype(fn), fn>
+#define NONTYPE(fn) compat::detail::nttp_holder<decltype(fn), fn>{}
+#define NONTYPE_T(fn) compat::detail::nttp_holder<decltype(fn), fn>
 
 #endif
 

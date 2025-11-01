@@ -13,7 +13,7 @@ namespace compat {
 
 namespace detail {
 
-template<class V, V v> struct nontype11
+template<class V, V v> struct nttp_holder
 {
 };
 
@@ -21,7 +21,7 @@ template<class V, V v> struct nontype11
 
 #if defined(__cpp_nontype_template_parameter_auto) && __cpp_nontype_template_parameter_auto >= 201606L
 
-template<auto V> struct nontype_t: public detail::nontype11<decltype(V), V>
+template<auto V> struct nontype_t: public detail::nttp_holder<decltype(V), V>
 {
     explicit nontype_t() = default;
 };
