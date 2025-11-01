@@ -39,12 +39,16 @@ namespace compat = boost::compat;
 
 int main() {
   {
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1&) noexcept>, NONTYPE_T(&F1::m1)>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(F1&, int) noexcept>, NONTYPE_T(&F1::m2)>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1&, int, int) noexcept>, NONTYPE_T(&F1::m3)>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(F1&, int, int, int) noexcept>, NONTYPE_T(&F1::m4)>));
   }
@@ -60,10 +64,12 @@ int main() {
   }
 
   {
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1&) const noexcept>, NONTYPE_T(&F1::m1)>));
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1&, int, int) const noexcept>, NONTYPE_T(&F1::m3)>));
+#endif
 
     F1 f1;
 
@@ -79,8 +85,10 @@ int main() {
         (std::is_constructible<compat::function_ref<int(F1 const&) noexcept>, NONTYPE_T(&F1::m1)>));
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1 const&, int) noexcept>, NONTYPE_T(&F1::m2)>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(F1 const&, int, int) noexcept>, NONTYPE_T(&F1::m3)>));
+#endif
 
     F1 f1;
 
@@ -89,12 +97,16 @@ int main() {
   }
 
   {
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int() noexcept>, NONTYPE_T(&F1::m1), F1&>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(int) noexcept>, NONTYPE_T(&F1::m2), F1&>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(int, int) noexcept>, NONTYPE_T(&F1::m3), F1&>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(int, int, int) noexcept>, NONTYPE_T(&F1::m4), F1&>));
 
@@ -112,8 +124,10 @@ int main() {
         (std::is_constructible<compat::function_ref<int() const noexcept>, NONTYPE_T(&F1::m1), F1 const&>));
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(int) const noexcept>, NONTYPE_T(&F1::m2), F1 const&>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<int(int, int) const noexcept>,
                                                   NONTYPE_T(&F1::m3), F1 const&>));
+#endif
 
     F1 f1;
 
@@ -126,12 +140,16 @@ int main() {
   }
 
   {
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int() noexcept>, NONTYPE_T(&F1::m1), F1*>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(int) noexcept>, NONTYPE_T(&F1::m2), F1*>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(int, int) noexcept>, NONTYPE_T(&F1::m3), F1*>));
+#endif
     BOOST_TEST_TRAIT_TRUE(
         (std::is_constructible<compat::function_ref<int(int, int, int) noexcept>, NONTYPE_T(&F1::m4), F1*>));
 
@@ -149,8 +167,10 @@ int main() {
         (std::is_constructible<compat::function_ref<int() const noexcept>, NONTYPE_T(&F1::m1), F1 const*>));
     BOOST_TEST_TRAIT_FALSE(
         (std::is_constructible<compat::function_ref<int(int) const noexcept>, NONTYPE_T(&F1::m2), F1 const*>));
+#if defined(__cpp_noexcept_function_types)
     BOOST_TEST_TRAIT_FALSE((std::is_constructible<compat::function_ref<int(int, int) const noexcept>,
                                                   NONTYPE_T(&F1::m3), F1 const*>));
+#endif
 
     F1 const f1;
 
