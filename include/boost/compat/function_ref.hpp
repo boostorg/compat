@@ -5,30 +5,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/compat/nontype.hpp>
 #include <boost/compat/invoke.hpp>
 #include <boost/compat/type_traits.hpp>
 
 #include <type_traits>
 #include <utility>
 
-#if defined(__cpp_nontype_template_parameter_auto) && __cpp_nontype_template_parameter_auto >= 201606L
-#define BOOST_COMPAT_HAS_AUTO_NTTP
-#endif
-
 namespace boost {
 namespace compat {
 
 template <class... S>
 struct function_ref;
-
-#if defined(BOOST_COMPAT_HAS_AUTO_NTTP)
-
-template <auto V>
-struct nontype_t {
-  explicit nontype_t() = default;
-};
-
-#endif
 
 namespace detail {
 
