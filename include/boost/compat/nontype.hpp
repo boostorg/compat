@@ -15,11 +15,19 @@
 namespace boost {
 namespace compat {
 
-#if defined(BOOST_COMPAT_HAS_AUTO_NTTP)
+namespace detail {
 
-template <auto V>
-struct nontype_t {
-  explicit nontype_t() = default;
+template<class V, V v> struct nontype11
+{
+};
+
+} // namespace detail
+
+#if defined(__cpp_nontype_template_parameter_auto) && __cpp_nontype_template_parameter_auto >= 201606L
+
+template<auto V> struct nontype_t: public detail::nontype11<decltype(V), V>
+{
+    explicit nontype_t() = default;
 };
 
 # if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304L
