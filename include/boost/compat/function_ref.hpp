@@ -141,7 +141,7 @@ public:
   function_ref(detail::nontype11<F, f> x) noexcept : base_type(mem_fn_tag{}, x) {}
 
   template <class F, F f, class U, class T = remove_reference_t<U>,
-            enable_if_t<!std::is_rvalue_reference_v<U&&> && is_invocable_using<F, T&>::value, int> = 0>
+            enable_if_t<!std::is_rvalue_reference<U&&>::value && is_invocable_using<F, T&>::value, int> = 0>
   function_ref(detail::nontype11<F, f> x, U&& obj) noexcept : base_type(mem_fn_tag{}, x, std::forward<U>(obj)) {}
 
   template <class F, F f, class T, enable_if_t<is_invocable_using<F, T*>::value, int> = 0>
@@ -179,7 +179,7 @@ public:
   function_ref(detail::nontype11<F, f> x) noexcept : base_type(mem_fn_tag{}, x) {}
 
   template <class F, F f, class U, class T = remove_reference_t<U>,
-            enable_if_t<!std::is_rvalue_reference_v<U&&> && is_invocable_using<F, T const&>::value, int> = 0>
+            enable_if_t<!std::is_rvalue_reference<U&&>::value && is_invocable_using<F, T const&>::value, int> = 0>
   function_ref(detail::nontype11<F, f> x, U&& obj) noexcept : base_type(mem_fn_tag{}, x, std::forward<U>(obj)) {}
 
   template <class F, F f, class T, enable_if_t<is_invocable_using<F, T const*>::value, int> = 0>
@@ -219,7 +219,7 @@ public:
   function_ref(detail::nontype11<F, f> x) noexcept : base_type(mem_fn_tag{}, x) {}
 
   template <class F, F f, class U, class T = remove_reference_t<U>,
-            enable_if_t<!std::is_rvalue_reference_v<U&&> && is_invocable_using<F, T&>::value, int> = 0>
+            enable_if_t<!std::is_rvalue_reference<U&&>::value && is_invocable_using<F, T&>::value, int> = 0>
   function_ref(detail::nontype11<F, f> x, U&& obj) noexcept : base_type(mem_fn_tag{}, x, std::forward<U>(obj)) {}
 
   template <class F, F f, class T, enable_if_t<is_invocable_using<F, T*>::value, int> = 0>
@@ -257,7 +257,7 @@ public:
   function_ref(detail::nontype11<F, f> x) noexcept : base_type(mem_fn_tag{}, x) {}
 
   template <class F, F f, class U, class T = remove_reference_t<U>,
-            enable_if_t<!std::is_rvalue_reference_v<U&&> && is_invocable_using<F, T const&>::value, int> = 0>
+            enable_if_t<!std::is_rvalue_reference<U&&>::value && is_invocable_using<F, T const&>::value, int> = 0>
   function_ref(detail::nontype11<F, f> x, U&& obj) noexcept : base_type(mem_fn_tag{}, x, std::forward<U>(obj)) {}
 
   template <class F, F f, class T, enable_if_t<is_invocable_using<F, T const*>::value, int> = 0>
