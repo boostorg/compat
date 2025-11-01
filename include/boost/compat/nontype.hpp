@@ -8,10 +8,6 @@
 
 #include <boost/config.hpp>
 
-#if defined(__cpp_nontype_template_parameter_auto) && __cpp_nontype_template_parameter_auto >= 201606L
-#define BOOST_COMPAT_HAS_AUTO_NTTP
-#endif
-
 namespace boost {
 namespace compat {
 
