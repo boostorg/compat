@@ -16,6 +16,11 @@ template `std::nontype`.
 `nontype` is used for passing function pointers or member function
 pointers to `function_ref`.
 
+Since `nontype_t` and `nontype` have a template parameter of type
+`auto`, they require {cpp}17. When {cpp}17 isn't available, this
+header can still be included, but doesn't define them. (It would
+have caused an error if it did.)
+
 ## Example
 
 ```
