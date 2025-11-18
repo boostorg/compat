@@ -39,8 +39,6 @@ for (auto fn : fns) {
 ## Synopsis
 
 ```cpp
-#include <boost/compat/nontype.hpp>
-
 namespace boost
 {
 namespace compat
