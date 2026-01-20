@@ -13,7 +13,8 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
-#include <functional>
+#include <array>
+#include <cstdint>
 #include <memory>
 #include <type_traits>
 
@@ -845,11 +846,39 @@ static void test_conv()
     }
 }
 
+static void test_mutable_lambda()
+{
+    {
+        // Within SBO limits.
+        int captured = 0;
+        move_only_function<int()> func = [captured]() mutable { return ++captured; };
+
+        BOOST_TEST_EQ( func(), 1 );
+        BOOST_TEST_EQ( func(), 2 );
+
+        move_only_function<int()> func2(std::move(func));
+        BOOST_TEST_EQ( func2(), 3 );
+    }
+
+    {
+        // Too large for SBO.
+        std::array<std::uint8_t, 256> captured = {{}};
+        move_only_function<int()> func = [captured]() mutable { return ++captured[0]; };
+
+        BOOST_TEST_EQ( func(), 1 );
+        BOOST_TEST_EQ( func(), 2 );
+
+        move_only_function<int()> func2(std::move(func));
+        BOOST_TEST_EQ( func2(), 3 );
+    }
+}
+
 int main()
 {
     test_call();
     test_traits();
     test_conv();
+    test_mutable_lambda();
 
     return boost::report_errors();
 }
