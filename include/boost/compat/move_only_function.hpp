@@ -247,7 +247,7 @@ bool is_nullary_arg( F f )
 template<bool NoEx, class R, class ...Args>
 struct mo_invoke_function_holder
 {
-    static R invoke_function( storage s, Args&&... args) noexcept( NoEx )
+    static R invoke_function( storage const& s, Args&&... args) noexcept( NoEx )
     {
         auto f = reinterpret_cast<R(*)( Args... )>( s.pfn_ );
         return compat::invoke_r<R>( f, std::forward<Args>( args )... );
@@ -257,7 +257,7 @@ struct mo_invoke_function_holder
 template<ref_quals RQ, bool Const, bool NoEx, class F, class R, class ...Args>
 struct mo_invoke_object_holder
 {
-    static R invoke_object( storage s, Args&&... args ) noexcept( NoEx )
+    static R invoke_object( storage const& s, Args&&... args ) noexcept( NoEx )
     {
         using T = remove_reference_t<F>;
         using cv_T = conditional_t<Const, add_const_t<T>, T>;
@@ -274,7 +274,7 @@ struct mo_invoke_object_holder
 template<ref_quals RQ, bool Const, bool NoEx, class F, class R, class ...Args>
 struct mo_invoke_local_holder
 {
-    static R invoke_local( storage s, Args&&... args ) noexcept( NoEx )
+    static R invoke_local( storage const& s, Args&&... args ) noexcept( NoEx )
     {
         using T = remove_reference_t<F>;
         using cv_T = conditional_t<Const, add_const_t<T>, T>;
@@ -285,7 +285,7 @@ struct mo_invoke_local_holder
             >
         >;
 
-        return compat::invoke_r<R>( static_cast<cv_ref_T>( *static_cast<cv_T*>( s.addr() ) ), std::forward<Args>( args )... );
+        return compat::invoke_r<R>( static_cast<cv_ref_T>( *static_cast<cv_T*>( const_cast<storage&>( s ).addr() ) ), std::forward<Args>( args )... );
     }
 };
 
@@ -485,9 +485,9 @@ struct move_only_function_base
 
     detail::storage s_;
 #if defined(__cpp_noexcept_function_type)
-    R ( *invoke_ )( detail::storage, Args&&... ) noexcept( NoEx ) = nullptr;
+    R ( *invoke_ )( detail::storage const&, Args&&... ) noexcept( NoEx ) = nullptr;
 #else
-    R ( *invoke_ )( detail::storage, Args&&... ) = nullptr;
+    R ( *invoke_ )( detail::storage const&, Args&&... ) = nullptr;
 #endif
     void ( *manager_ )( op_type, detail::storage&, detail::storage* ) = &manage_empty;
 };
