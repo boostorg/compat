@@ -436,6 +436,22 @@ struct move_only_function_base
     }
 
     template<class VT, class ...CArgs>
+    void init_object( std::false_type /* use_sbo */, CArgs&& ...args )
+    {
+        s_.pobj_ = new VT( std::forward<CArgs>( args )... );
+        invoke_ = &mo_invoke_object_holder<RQ, Const, NoEx, VT, R, Args...>::invoke_object;
+        manager_ = &manage_object<VT>;
+    }
+
+    template<class VT, class ...CArgs>
+    void init_object( std::true_type /* use_sbo */, CArgs&& ...args )
+    {
+        new( s_.addr() ) VT( std::forward<CArgs>( args )... );
+        invoke_ = &mo_invoke_local_holder<RQ, Const, NoEx, VT, R, Args...>::invoke_local;
+        manager_ = &manage_local<VT>;
+    }
+
+    template<class VT, class ...CArgs>
     void init( std::false_type /* is_function */, CArgs&& ...args )
     {
         if( is_polymorphic_function<VT>::value )
@@ -444,18 +460,7 @@ struct move_only_function_base
             return;
         }
 
-        if( !storage::use_sbo<VT>() )
-        {
-            s_.pobj_ = new VT( std::forward<CArgs>( args )... );
-            invoke_ = &mo_invoke_object_holder<RQ, Const, NoEx, VT, R, Args...>::invoke_object;
-            manager_ = &manage_object<VT>;
-        }
-        else
-        {
-            new( s_.addr() ) VT( std::forward<CArgs>( args )... );
-            invoke_ = &mo_invoke_local_holder<RQ, Const, NoEx, VT, R, Args...>::invoke_local;
-            manager_ = &manage_local<VT>;
-        }
+        init_object<VT>( std::integral_constant<bool, storage::use_sbo<VT>()>{}, std::forward<CArgs>( args )... );
     }
 
     template<class VT, class ...CArgs>
