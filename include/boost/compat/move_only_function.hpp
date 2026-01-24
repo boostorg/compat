@@ -397,7 +397,7 @@ struct move_only_function_base
             case op_type::move:
             {
                 VT* p = static_cast<VT*>( src->addr() );
-                new(s.addr()) VT( std::move( *p ) );
+                ::new( s.addr() ) VT( std::move( *p ) );
                 // destruct the element here because move construction will leave the container empty
                 // outside of this function
                 p->~VT();
@@ -446,7 +446,7 @@ struct move_only_function_base
     template<class VT, class ...CArgs>
     void init_object( std::true_type /* use_sbo */, CArgs&& ...args )
     {
-        new( s_.addr() ) VT( std::forward<CArgs>( args )... );
+        ::new( s_.addr() ) VT( std::forward<CArgs>( args )... );
         invoke_ = &mo_invoke_local_holder<RQ, Const, NoEx, VT, R, Args...>::invoke_local;
         manager_ = &manage_local<VT>;
     }
