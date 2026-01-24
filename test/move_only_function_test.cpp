@@ -102,6 +102,9 @@ struct callable
     {
         return *p_ + x;
     }
+
+    // Should never be called, as this should always fit into the small buffer.
+    void* operator new(std::size_t) { throw 1234; }
 };
 
 struct noex_callable
@@ -122,6 +125,9 @@ struct noex_callable
     {
         return *p_ + x;
     }
+
+    // Should never be called, as this should always fit into the small buffer.
+    void* operator new(std::size_t) { throw 1234; }
 };
 
 struct large_callable
